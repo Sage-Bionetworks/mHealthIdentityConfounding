@@ -56,34 +56,16 @@ DRPermDistrAUC <- function(dat,
   dat[, labelName] <- factor(as.character(dat[, labelName]), 
                              levels = c(negClassName, posClassName)) 
   myFormula <- as.formula(paste(labelName, " ~ ", paste(featNames, collapse = " + ")))
-  nullDistr <- rep(NA, nperm)
-  if (verbose) {
-    for (i in seq(nperm)) {
-      cat(i, "\n") 
-      datPS <- SubjectWiseLabelShuffling(dat, subjectIdName, labelName, idxTrain, idxTest)
-      fitPS <- randomForest(myFormula, data = datPS[idxTrain,])
-      predProbsPS <- predict(fitPS, datPS[idxTest, -1, drop = FALSE], type = "prob")
-      rocObjPS <- roc(datPS[idxTest, 1], predProbsPS[, posClassName], direction = "<", 
-                      levels = c(negClassName, posClassName)) 
-      nullDistr[i] <- pROC::auc(rocObjPS)[1]
-    }
-  }
-  else {
-    for (i in seq(nperm)) {
-      datPS <- SubjectWiseLabelShuffling(dat, subjectIdName, labelName, idxTrain, idxTest)
-      fitPS <- randomForest(myFormula, data = datPS[idxTrain,])
-      predProbsPS <- predict(fitPS, datPS[idxTest, -1, drop = FALSE], type = "prob")
-      rocObjPS <- roc(datPS[idxTest, 1], predProbsPS[, posClassName], direction = "<", 
-                      levels = c(negClassName, posClassName)) 
-      nullDistr[i] <- pROC::auc(rocObjPS)[1]
-    } 
-  }
-  
-
-  
-  nullDistr 
+  res_auc <- plyr::llply(1:nperm, .parallel = T,  function(num){
+    datPS <- SubjectWiseLabelShuffling(dat, subjectIdName, labelName, idxTrain, idxTest)
+    fitPS <- randomForest(myFormula, data = datPS[idxTrain,])
+    predProbsPS <- predict(fitPS, datPS[idxTest, -1, drop = FALSE], type = "prob")
+    rocObjPS <- roc(datPS[idxTest, 1], predProbsPS[, posClassName], direction = "<", 
+                    levels = c(negClassName, posClassName)) 
+    pROC::auc(rocObjPS)[1]
+  })
+  res_auc
 }
-
 
 
 
