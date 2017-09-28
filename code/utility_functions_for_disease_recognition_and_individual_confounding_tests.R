@@ -51,12 +51,13 @@ DRPermDistrAUC <- function(dat,
                            featNames,
                            negClassName, 
                            posClassName,
-                           verbose = TRUE) {
+                           verbose = TRUE,
+                           parallel=F) {
   dat <- dat[, c(labelName, featNames, subjectIdName)]
   dat[, labelName] <- factor(as.character(dat[, labelName]), 
                              levels = c(negClassName, posClassName)) 
   myFormula <- as.formula(paste(labelName, " ~ ", paste(featNames, collapse = " + ")))
-  res_auc <- plyr::llply(1:nperm, .parallel = T,  function(num){
+  res_auc <- plyr::llply(1:nperm, .parallel = parallel,  function(num){
     datPS <- SubjectWiseLabelShuffling(dat, subjectIdName, labelName, idxTrain, idxTest)
     fitPS <- randomForest(myFormula, data = datPS[idxTrain,])
     predProbsPS <- predict(fitPS, datPS[idxTest, -1, drop = FALSE], type = "prob")
@@ -91,11 +92,8 @@ ICPermDistrAUC <- function(dat,
   dat <- dat[, c(labelName, featNames, subjectIdName)]
   dat[, labelName] <- factor(as.character(dat[, labelName]), 
                              levels = c(negClassName, posClassName)) 
-  myFormula <- as.formula(paste(labelName, " ~ ", paste(featNames, collapse = " + ")))
-  nullDistr <- rep(NA, nperm)
-  if (verbose) {
-    for (i in seq(npermf)) {
-      cat(i, "\n")
+  #myFormula <- as.formula(paste(labelName, " ~ ", paste(featNames, collapse = " + ")))
+  res_median_auc <- plyr::llply(1:npermf, .parallel = T,  function(num){
       datS <- RecordWiseFeatureShuffling(dat, featNames)
       aux <- DRPermDistrAUC(datS, 
                             idxTrain,
@@ -106,28 +104,10 @@ ICPermDistrAUC <- function(dat,
                             featNames,
                             negClassName, 
                             posClassName,
-                            verbose = FALSE)
-      nullDistr[i] <- median(aux)
-    }
-  }
-  else {
-    for (i in seq(npermf)) {
-      datS <- RecordWiseFeatureShuffling(dat, featNames)
-      aux <- DRPermDistrAUC(datS, 
-                            idxTrain,
-                            idxTest,
-                            nperm = nperml, 
-                            subjectIdName, 
-                            labelName, 
-                            featNames,
-                            negClassName, 
-                            posClassName,
-                            verbose = FALSE)
-      nullDistr[i] <- median(aux)
-    }
-  }
-  
-  nullDistr
+                            verbose = FALSE,
+                            parallel=F) ## In a nested setting we dont want to parallelize the inner loop 
+    median(aux)
+  })
 }
 
 
