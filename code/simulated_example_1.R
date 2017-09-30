@@ -83,7 +83,7 @@ set.seed(12345001)
 system.time(ic.rws.1 <- ICPermDistrAUC(dat = dat1, 
                            idxTrain = recordSplit1$idxTrain, 
                            idxTest = recordSplit1$idxTest, 
-                           npermf = 10,
+                           npermf = 1000,
                            nperml = 30,
                            subjectIdName = "subjectId", 
                            labelName = "diseaseLabel", 

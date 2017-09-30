@@ -65,7 +65,7 @@ DRPermDistrAUC <- function(dat,
                     levels = c(negClassName, posClassName)) 
     pROC::auc(rocObjPS)[1]
   })
-  res_auc
+  unlist(res_auc)
 }
 
 
@@ -89,9 +89,11 @@ ICPermDistrAUC <- function(dat,
                            negClassName, 
                            posClassName,
                            verbose = TRUE) {
+  
   dat <- dat[, c(labelName, featNames, subjectIdName)]
   dat[, labelName] <- factor(as.character(dat[, labelName]), 
                              levels = c(negClassName, posClassName)) 
+  
   #myFormula <- as.formula(paste(labelName, " ~ ", paste(featNames, collapse = " + ")))
   res_median_auc <- plyr::llply(1:npermf, .parallel = T,  function(num){
       datS <- RecordWiseFeatureShuffling(dat, featNames)
@@ -106,8 +108,9 @@ ICPermDistrAUC <- function(dat,
                             posClassName,
                             verbose = FALSE,
                             parallel=F) ## In a nested setting we dont want to parallelize the inner loop 
-    median(aux)
+     median(aux)
   })
+  unlist(res_median_auc)
 }
 
 
