@@ -91,8 +91,6 @@ system.time(res_4 <- ICPermDistrAUC(dat = dat1,
                            negClassName = "-1", 
                            posClassName = "1"))
 
-save.image('till_model4.RData')
-
 
 set.seed(12345005)
 system.time(res_5 <- ICPermDistrAUC(dat = dat1, 
@@ -106,14 +104,8 @@ system.time(res_5 <- ICPermDistrAUC(dat = dat1,
                            negClassName = "-1", 
                            posClassName = "1"))
 
-save.image('till_model5.RData')
-
-unlist(res_5)
 
 
-synapseClient::synapseLogin()
-synapseClient::synStore(synapseClient::File("till_model5.RData",
-                                            parentId = "syn10932612"))
 
 
 
@@ -146,7 +138,7 @@ res_60_90 <- lapply(seq(60,90,by=10), function(x){
                  posClassName = "1")
 })
 
-median_AUC <- c(unlist(lapply(res_10_50, sd)), 
+sd_AUC <- c(unlist(lapply(res_10_50, sd)), 
 unlist(lapply(res_60_90, sd)),
 sd(unlist(res_1)),
 sd(unlist(res_2)),
@@ -155,7 +147,14 @@ sd(unlist(res_4)),
 sd(unlist(res_5)))
 
 res <- data.frame(permutation=c(10,20,30,40,50,60,70,80,90,100,200,300,400,500),
-           median_AUC = median_AUC)
+           sd_AUC = sd_AUC)
 library(ggplot2)
-ggplot(data=res, aes(x=permutation, y=median_AUC)) + geom_line() + geom_point() + theme_bw()
+ggplot(data=res, aes(x=permutation, y=sd_AUC)) + geom_line() + geom_point() + theme_bw()
 ggsave(file="permutation_plot.png", width=5, height=5, dpi=200)
+
+save.image("20170930_permutation_combinations.Rdata")
+synapseClient::synapseLogin()
+synapseClient::synStore(synapseClient::File("20170930_permutation_combinations.Rdata",
+                                            parentId = "syn10932612"),
+                        executed="https://github.com/Sage-Bionetworks/individualConfoundingTests/blob/master/code/check_necessary_number_of_label_permutations.R")
+
