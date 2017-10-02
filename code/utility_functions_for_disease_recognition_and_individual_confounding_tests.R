@@ -1,7 +1,5 @@
-
-library(pROC)
-library(randomForest)
-library(MatchIt)
+library(install.load)
+install_load("pROC", "randomForest", "MatchIt")
 
 
 ####################################
