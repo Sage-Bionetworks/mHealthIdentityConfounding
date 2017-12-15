@@ -6,10 +6,10 @@ source("utility_functions_disease_recognition_and_identity_confounding.R")
 
 
 ## load the data 
-load(getFileLocation(synGet("syn10933730")))
+load(getFileLocation(synGet("syn10903849")))
 
 ## load matched participants 
-load(getFileLocation(synGet("syn10933736")))
+load(getFileLocation(synGet("syn10903906")))
 
 ## load feature names
 load(getFileLocation(synGet("syn10903865")))
@@ -36,7 +36,7 @@ colnames(drRWS) <- paste("run", seq(nRuns), sep = "")
 drSWS <- drRWS
 
 for (i in seq(nRuns)) {
-  cat("tap", i, "\n")
+  cat("tapping", i, "\n")
   set.seed(myseeds[i])
   recordSplit <- GetIdxTrainTestSplitByRecord(dat, nSplits = 2)
   set.seed(myseeds[i])
@@ -78,7 +78,8 @@ for (i in seq(nRuns)) {
                                featNames = featNames,
                                negClassName = "FALSE", 
                                posClassName = "TRUE",
-                               verbose = FALSE)
+                               verbose = FALSE,
+                               parallel = FALSE)
   statsRWS[i, "medianDRNull"] <- median(drRWS[, i], na.rm = TRUE)
   statsRWS[i, "permPvalDR"] <- sum(drRWS[, i] >= statsRWS[i, "auc"])/nperm
   ####
@@ -91,11 +92,12 @@ for (i in seq(nRuns)) {
                                featNames = featNames,
                                negClassName = "FALSE", 
                                posClassName = "TRUE",
-                               verbose = FALSE) 
+                               verbose = FALSE,
+                               parallel = FALSE) 
   statsSWS[i, "medianDRNull"] <- median(drSWS[, i], na.rm = TRUE)
   statsSWS[i, "permPvalDR"] <- sum(drSWS[, i] >= statsSWS[i, "auc"])/nperm  
   
   save(statsRWS, statsSWS, drRWS, drSWS,
-       file = "output_mPower_tap_data_50_belltown.RData", compress = TRUE)
+       file = "output_mPower_tap_data_100.RData", compress = TRUE)
 }
 

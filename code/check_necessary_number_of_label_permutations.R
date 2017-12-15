@@ -1,7 +1,7 @@
 library("install.load")
 install_load("pROC", "randomForest", "MatchIt", "doMC")
 registerDoMC(detectCores() - 2)
-source("code/utility_functions_for_disease_recognition_and_individual_confounding_tests.R")
+source("code/utility_functions_old.R")
 
 
 nFeatures <- 10 

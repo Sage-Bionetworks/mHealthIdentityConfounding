@@ -4,19 +4,17 @@ synapseLogin()
 
 source("utility_functions_disease_recognition_and_identity_confounding.R")
 
-
 ## load the data 
-load(getFileLocation(synGet("syn10933730")))
+load(getFileLocation(synGet("syn11059980")))
 
 ## load matched participants 
-load(getFileLocation(synGet("syn10933736")))
+load(getFileLocation(synGet("syn11059982")))
 
 ## load feature names
-load(getFileLocation(synGet("syn10903865")))
+load(getFileLocation(synGet("syn10903864")))
 
-dat <- bdatTap
-featNames <- tapFeatNames
-
+dat <- bdatVoi
+featNames <- voiFeatNames
 
 nperm <- 1000
 nRuns <- 30
@@ -36,9 +34,9 @@ colnames(drRWS) <- paste("run", seq(nRuns), sep = "")
 drSWS <- drRWS
 
 for (i in seq(nRuns)) {
-  cat("tap", i, "\n")
+  cat("voice", i, "\n")
   set.seed(myseeds[i])
-  recordSplit <- GetIdxTrainTestSplitByRecord(dat, nSplits = 2)
+  recordSplit <- GetIdxTrainTestSplitByRecord(bdatVoi, nSplits = 2)
   set.seed(myseeds[i])
   subjectSplit <- GetIdxTrainTestSplitBySubjectBalanced(dat = dat, 
                                                         matchedCaseControlParticipants = matchedCaseControlParticipants, 
@@ -96,6 +94,6 @@ for (i in seq(nRuns)) {
   statsSWS[i, "permPvalDR"] <- sum(drSWS[, i] >= statsSWS[i, "auc"])/nperm  
   
   save(statsRWS, statsSWS, drRWS, drSWS,
-       file = "output_mPower_tap_data_50_belltown.RData", compress = TRUE)
+       file = "output_mPower_voice_data_10.RData", compress = TRUE)
 }
 
