@@ -1,8 +1,10 @@
-
 require(synapseClient)
 synapseLogin()
+install_load("pROC", "MatchIt", 'lhs')
+source("code/utility_functions_disease_recognition_and_identity_confounding.R")
 
-source("utility_functions_disease_recognition_and_identity_confounding.R")
+
+SYN_FIGURE_LOCATION= "syn11617582"
 
 ########################################################
 ########################################################
@@ -42,6 +44,8 @@ cf3 <- cor(X3)
 
 mycol <- heat.colors(n = 100)
 
+
+pdf("Supplementary_Figure_1.pdf")
 par(mfrow = c(2, 4), mar = c(3, 3, 1, 0.1), mgp = c(1.5, 0.75, 0))
 image(cr0, xaxt = "n", yaxt = "n", col = mycol, xlab = "rows", ylab = "rows",
       main = expression(MN(0, I, I)), zlim = c(-1, 1))
@@ -90,8 +94,12 @@ image(cf3, xaxt = "n", yaxt = "n", col = mycol, xlab = "columns", ylab = "column
 axis(side = 1, at = seq(nFeatures)/nFeatures, label = seq(nFeatures))
 axis(side = 2, at = seq(nFeatures)/nFeatures, label = seq(nFeatures))
 mtext("(h)", side = 3, at = 0)
-
-
+dev.off()
+#push figure and provenance to synapse
+synStore(File("Supplementary_Figure_1.pdf", parentId = SYN_FIGURE_LOCATION),
+         used = 'https://raw.githubusercontent.com/Sage-Bionetworks/mHealthIdentityConfounding/master/code/utility_functions_disease_recognition_and_identity_confounding.R?token=AAI6z3aAM6iLYhShAI8iNza0M7Q3UREtks5aQsCuwA%3D%3D',
+         executed = 'https://github.com/Sage-Bionetworks/mHealthIdentityConfounding/blob/master/code/manuscript_figures.R')
+unlink("Supplementary_Figure_1.pdf")
 
 
 ########################################################
