@@ -1,10 +1,11 @@
 require(synapseClient)
 synapseLogin()
+
+library(install.load)
 install_load("pROC", "MatchIt", 'lhs')
 source("code/utility_functions_disease_recognition_and_identity_confounding.R")
 
-
-SYN_FIGURE_LOCATION= "syn11617582"
+SYN_FIGURE_LOCATION <- "syn11617582"
 
 ########################################################
 ########################################################
@@ -45,7 +46,7 @@ cf3 <- cor(X3)
 mycol <- heat.colors(n = 100)
 
 
-pdf("Supplementary_Figure_1.pdf")
+pdf(file = "sfig1_matrix_normal_examples.pdf", width = 6.5, height = 3.7)
 par(mfrow = c(2, 4), mar = c(3, 3, 1, 0.1), mgp = c(1.5, 0.75, 0))
 image(cr0, xaxt = "n", yaxt = "n", col = mycol, xlab = "rows", ylab = "rows",
       main = expression(MN(0, I, I)), zlim = c(-1, 1))
@@ -95,11 +96,12 @@ axis(side = 1, at = seq(nFeatures)/nFeatures, label = seq(nFeatures))
 axis(side = 2, at = seq(nFeatures)/nFeatures, label = seq(nFeatures))
 mtext("(h)", side = 3, at = 0)
 dev.off()
-#push figure and provenance to synapse
-synStore(File("Supplementary_Figure_1.pdf", parentId = SYN_FIGURE_LOCATION),
+
+# push figure and provenance to synapse
+synStore(File("sfig1_matrix_normal_examples.pdf", parentId = SYN_FIGURE_LOCATION),
          used = 'https://raw.githubusercontent.com/Sage-Bionetworks/mHealthIdentityConfounding/master/code/utility_functions_disease_recognition_and_identity_confounding.R?token=AAI6z3aAM6iLYhShAI8iNza0M7Q3UREtks5aQsCuwA%3D%3D',
          executed = 'https://github.com/Sage-Bionetworks/mHealthIdentityConfounding/blob/master/code/manuscript_figures.R')
-unlink("Supplementary_Figure_1.pdf")
+unlink("sfig1_matrix_normal_examples.pdf")
 
 
 ########################################################
@@ -113,7 +115,7 @@ unlink("Supplementary_Figure_1.pdf")
 ########################################################
 
 ## output generated in AWS using the R script:
-## (abhi's script name here)
+## check_necessary_number_of_label_permutations.R
 ##
 load(getFileLocation(synGet("syn10945245")))
 
@@ -163,7 +165,7 @@ mat <- matrix(c(1, 1,
                 2, 3,
                 2, 3), 5, 2, byrow = TRUE)
 
-
+pdf(file = "sfig2_sufficient_number_of_label_permutations.pdf", width = 6.5, height = 6.5)
 layout(mat)
 par(mar = c(4, 4, 1, 1), mgp = c(2, 0.75, 0))
 ####
@@ -201,8 +203,12 @@ lines(d500$x, d500$y, col = 14)
 legend("topleft", legend = c("# of label perms:", xaxis[c(1, 12:14)]), text.col = c(1, 1, 12:14), 
        bty = "n", cex = 0.9)
 mtext("(c)", side = 3, at = 0.575, line = -2, cex = 1.2)
+dev.off()
 
-
+synStore(File("sfig2_sufficient_number_of_label_permutations.pdf", parentId = SYN_FIGURE_LOCATION),
+         used = c("syn10945245", "https://raw.githubusercontent.com/Sage-Bionetworks/mHealthIdentityConfounding/master/code/utility_functions_disease_recognition_and_identity_confounding.R?token=AAI6z3aAM6iLYhShAI8iNza0M7Q3UREtks5aQsCuwA%3D%3D"),
+         executed = 'https://github.com/Sage-Bionetworks/mHealthIdentityConfounding/blob/master/code/manuscript_figures.R')
+unlink("sfig2_sufficient_number_of_label_permutations.pdf")
 
 ########################################################
 ########################################################
@@ -215,6 +221,7 @@ mtext("(c)", side = 3, at = 0.575, line = -2, cex = 1.2)
 ## run_synthetic_data_examples.R 
 load(getFileLocation(synGet("syn11564867")))
 
+pdf(file = "fig4_example1.pdf", width = 6.5, height = 7.5)
 SyntheticDataExampleFigure(dat = dat1,
                            dr.rws = dr.rws.1,
                            ic.rws = ic.rws.1,
@@ -222,8 +229,12 @@ SyntheticDataExampleFigure(dat = dat1,
                            ic.sws = ic.sws.1,
                            aucR = aucR.1,
                            aucS = aucS.1)
+dev.off()
 
-
+synStore(File("fig4_example1.pdf", parentId = SYN_FIGURE_LOCATION),
+         used = c("syn11564867", "https://raw.githubusercontent.com/Sage-Bionetworks/mHealthIdentityConfounding/master/code/utility_functions_disease_recognition_and_identity_confounding.R?token=AAI6z3aAM6iLYhShAI8iNza0M7Q3UREtks5aQsCuwA%3D%3D"),
+         executed = 'https://github.com/Sage-Bionetworks/mHealthIdentityConfounding/blob/master/code/manuscript_figures.R')
+unlink("fig4_example1.pdf")
 
 ########################################################
 ########################################################
@@ -236,6 +247,7 @@ SyntheticDataExampleFigure(dat = dat1,
 ## run_synthetic_data_examples.R 
 load(getFileLocation(synGet("syn11564868")))
 
+pdf(file = "fig5_example2.pdf", width = 6.5, height = 7.5)
 SyntheticDataExampleFigure(dat = dat2,
                            dr.rws = dr.rws.2,
                            ic.rws = ic.rws.2,
@@ -243,8 +255,12 @@ SyntheticDataExampleFigure(dat = dat2,
                            ic.sws = ic.sws.2,
                            aucR = aucR.2,
                            aucS = aucS.2)
+dev.off()
 
-
+synStore(File("fig5_example2.pdf", parentId = SYN_FIGURE_LOCATION),
+         used = c("syn11564868", "https://raw.githubusercontent.com/Sage-Bionetworks/mHealthIdentityConfounding/master/code/utility_functions_disease_recognition_and_identity_confounding.R?token=AAI6z3aAM6iLYhShAI8iNza0M7Q3UREtks5aQsCuwA%3D%3D"),
+         executed = 'https://github.com/Sage-Bionetworks/mHealthIdentityConfounding/blob/master/code/manuscript_figures.R')
+unlink("fig5_example2.pdf")
 
 ########################################################
 ########################################################
@@ -257,6 +273,7 @@ SyntheticDataExampleFigure(dat = dat2,
 ## run_synthetic_data_examples.R 
 load(getFileLocation(synGet("syn11564869")))
 
+pdf(file = "fig6_example3.pdf", width = 6.5, height = 7.5)
 SyntheticDataExampleFigure(dat = dat3,
                            dr.rws = dr.rws.3,
                            ic.rws = ic.rws.3,
@@ -264,8 +281,12 @@ SyntheticDataExampleFigure(dat = dat3,
                            ic.sws = ic.sws.3,
                            aucR = aucR.3,
                            aucS = aucS.3)
+dev.off()
 
-
+synStore(File("fig6_example3.pdf", parentId = SYN_FIGURE_LOCATION),
+         used = c("syn11564869", "https://raw.githubusercontent.com/Sage-Bionetworks/mHealthIdentityConfounding/master/code/utility_functions_disease_recognition_and_identity_confounding.R?token=AAI6z3aAM6iLYhShAI8iNza0M7Q3UREtks5aQsCuwA%3D%3D"),
+         executed = 'https://github.com/Sage-Bionetworks/mHealthIdentityConfounding/blob/master/code/manuscript_figures.R')
+unlink("fig6_example3.pdf")
 
 ########################################################
 ########################################################
@@ -278,6 +299,7 @@ SyntheticDataExampleFigure(dat = dat3,
 ## run_synthetic_data_examples.R 
 load(getFileLocation(synGet("syn11564870")))
 
+pdf(file = "fig7_example4.pdf", width = 6.5, height = 7.5)
 SyntheticDataExampleFigure(dat = dat4,
                            dr.rws = dr.rws.4,
                            ic.rws = ic.rws.4,
@@ -285,8 +307,12 @@ SyntheticDataExampleFigure(dat = dat4,
                            ic.sws = ic.sws.4,
                            aucR = aucR.4,
                            aucS = aucS.4)
+dev.off()
 
-
+synStore(File("fig7_example4.pdf", parentId = SYN_FIGURE_LOCATION),
+         used = c("syn11564870", "https://raw.githubusercontent.com/Sage-Bionetworks/mHealthIdentityConfounding/master/code/utility_functions_disease_recognition_and_identity_confounding.R?token=AAI6z3aAM6iLYhShAI8iNza0M7Q3UREtks5aQsCuwA%3D%3D"),
+         executed = 'https://github.com/Sage-Bionetworks/mHealthIdentityConfounding/blob/master/code/manuscript_figures.R')
+unlink("fig7_example4.pdf")
 
 ########################################################
 ########################################################
@@ -299,6 +325,7 @@ SyntheticDataExampleFigure(dat = dat4,
 ## run_synthetic_data_examples.R
 load(getFileLocation(synGet("syn11564871")))
 
+pdf(file = "fig8_example5.pdf", width = 6.5, height = 7.5)
 SyntheticDataExampleFigure(dat = dat5,
                            dr.rws = dr.rws.5,
                            ic.rws = ic.rws.5,
@@ -306,8 +333,12 @@ SyntheticDataExampleFigure(dat = dat5,
                            ic.sws = ic.sws.5,
                            aucR = aucR.5,
                            aucS = aucS.5)
+dev.off()
 
-
+synStore(File("fig8_example5.pdf", parentId = SYN_FIGURE_LOCATION),
+         used = c("syn11564871", "https://raw.githubusercontent.com/Sage-Bionetworks/mHealthIdentityConfounding/master/code/utility_functions_disease_recognition_and_identity_confounding.R?token=AAI6z3aAM6iLYhShAI8iNza0M7Q3UREtks5aQsCuwA%3D%3D"),
+         executed = 'https://github.com/Sage-Bionetworks/mHealthIdentityConfounding/blob/master/code/manuscript_figures.R')
+unlink("fig8_example5.pdf")
 
 ########################################################
 ########################################################
@@ -320,6 +351,7 @@ SyntheticDataExampleFigure(dat = dat5,
 ## run_synthetic_data_examples.R 
 load(getFileLocation(synGet("syn11564872")))
 
+pdf(file = "fig9_example6.pdf", width = 6.5, height = 7.5)
 SyntheticDataExampleFigure(dat = dat6,
                            dr.rws = dr.rws.6,
                            ic.rws = ic.rws.6,
@@ -327,8 +359,12 @@ SyntheticDataExampleFigure(dat = dat6,
                            ic.sws = ic.sws.6,
                            aucR = aucR.6,
                            aucS = aucS.6)
+dev.off()
 
-
+synStore(File("fig9_example6.pdf", parentId = SYN_FIGURE_LOCATION),
+         used = c("syn11564872", "https://raw.githubusercontent.com/Sage-Bionetworks/mHealthIdentityConfounding/master/code/utility_functions_disease_recognition_and_identity_confounding.R?token=AAI6z3aAM6iLYhShAI8iNza0M7Q3UREtks5aQsCuwA%3D%3D"),
+         executed = 'https://github.com/Sage-Bionetworks/mHealthIdentityConfounding/blob/master/code/manuscript_figures.R')
+unlink("fig9_example6.pdf")
 
 
 ########################################################
@@ -363,7 +399,7 @@ cl <- 0.8
 ca <- 0.8
 cleg <- 0.6
 
-
+pdf(file = "sfig3_simulations_under_null.pdf", width = 6.5, height = 3.5)
 par(mfrow = c(2, 4), mar = c(3, 3, 1, 0.5), mgp = c(1.5, 0.5, 0))
 hist(nullSim$drPermPvalRWS, probability = TRUE, ylim = myylim, xlim = c(0, 1), xlab = "p-value", 
      main = "disease recog. perm. test", cex.main = cm, border = "brown", cex.lab = cl, cex.axis = ca)
@@ -398,8 +434,12 @@ hist(nullSim$null3PvalSWS, probability = TRUE, ylim = myylim, xlim = c(0, 1), xl
      main = "disease recog. and / or ind. conf.", cex.main = cm, cex.lab = cl, cex.axis = ca)
 legend("topright", legend = "subject-wise split", text.col = "black", bty = "n", cex = cleg)
 mtext("(h)", side = 3, at = myat, line = -2, cex = cl)
+dev.off()
 
-
+synStore(File("sfig3_simulations_under_null.pdf", parentId = SYN_FIGURE_LOCATION),
+         used = c("syn11565429", "https://raw.githubusercontent.com/Sage-Bionetworks/mHealthIdentityConfounding/master/code/utility_functions_disease_recognition_and_identity_confounding.R?token=AAI6z3aAM6iLYhShAI8iNza0M7Q3UREtks5aQsCuwA%3D%3D"),
+         executed = 'https://github.com/Sage-Bionetworks/mHealthIdentityConfounding/blob/master/code/manuscript_figures.R')
+unlink("sfig3_simulations_under_null.pdf")
 
 ########################################################
 ########################################################
@@ -461,6 +501,7 @@ rgbalpha <- 0.75
 yupper1 <- 60
 yupper2 <- 65
 
+pdf(file = "fig10_mPower_voice_example.pdf", width = 6.5, height = 7.5)
 layout(mat)
 ##############
 par(mar = c(3, 3, 2, 1) + 0.1, mgp = c(2, 0.75, 0))
@@ -516,8 +557,12 @@ segments(x0 = -1, x1 = 31, y0 = 0.5, y1 = 0.5, col = "red")
 segments(x0 = 31, x1 = 40, y0 = 0.05, y1 = 0.05, lty = 2, col = "red")
 abline(v = 31, lty = 1)
 mtext("(d)", side = 3, at = 0, line = myline)
+dev.off()
 
-
+synStore(File("fig10_mPower_voice_example.pdf", parentId = SYN_FIGURE_LOCATION),
+         used = c("syn11565454", "syn11566235", "https://raw.githubusercontent.com/Sage-Bionetworks/mHealthIdentityConfounding/master/code/utility_functions_disease_recognition_and_identity_confounding.R?token=AAI6z3aAM6iLYhShAI8iNza0M7Q3UREtks5aQsCuwA%3D%3D"),
+         executed = 'https://github.com/Sage-Bionetworks/mHealthIdentityConfounding/blob/master/code/manuscript_figures.R')
+unlink("fig10_mPower_voice_example.pdf")
 
 ########################################################
 ########################################################
@@ -580,6 +625,7 @@ rgbalpha <- 0.75
 yupper1 <- 60
 yupper2 <- 65
 
+pdf(file = "fig11_mPower_tapping_example.pdf", width = 6.5, height = 7.5)
 layout(mat)
 ##############
 par(mar = c(3, 3, 2, 1) + 0.1, mgp = c(2, 0.75, 0))
@@ -635,8 +681,12 @@ segments(x0 = -1, x1 = 31, y0 = 0.5, y1 = 0.5, col = "red")
 segments(x0 = 31, x1 = 40, y0 = 0.05, y1 = 0.05, lty = 2, col = "red")
 abline(v = 31, lty = 1)
 mtext("(d)", side = 3, at = 0, line = myline)
+dev.off()
 
-
+synStore(File("fig11_mPower_tapping_example.pdf", parentId = SYN_FIGURE_LOCATION),
+         used = c("syn11566306", "syn11566313", "https://raw.githubusercontent.com/Sage-Bionetworks/mHealthIdentityConfounding/master/code/utility_functions_disease_recognition_and_identity_confounding.R?token=AAI6z3aAM6iLYhShAI8iNza0M7Q3UREtks5aQsCuwA%3D%3D"),
+         executed = 'https://github.com/Sage-Bionetworks/mHealthIdentityConfounding/blob/master/code/manuscript_figures.R')
+unlink("fig11_mPower_tapping_example.pdf")
 
 ########################################################
 ########################################################
@@ -695,7 +745,7 @@ mycex <- 0.9
 cm <- 1
 cs <- 0.6
 
-
+pdf(file = "fig12_mPower_voice_increasing_number_of_subjects.pdf", width = 6.5, height = 7)
 par(mar = c(3, 3, 1.5, 0.5), mgp = c(2, 0.75, 0))
 layout(mat)
 boxplot(drRWS.100, ylim = c(0.82, 1), las = 2, main = "record-wise split, 22 subjects",
@@ -747,8 +797,12 @@ abline(h = 0.05, col = "red")
 legend("topleft", legend = c("record-wise data split", "subject-wise data split"), 
        text.col = c("brown", "black"), bty = "n")
 mtext("(g)", side = 3, at = 6.5, line = -2)
+dev.off()
 
-
+synStore(File("fig12_mPower_voice_increasing_number_of_subjects.pdf", parentId = SYN_FIGURE_LOCATION),
+         used = c("syn11566235", "syn11566321", "syn11566323", "https://raw.githubusercontent.com/Sage-Bionetworks/mHealthIdentityConfounding/master/code/utility_functions_disease_recognition_and_identity_confounding.R?token=AAI6z3aAM6iLYhShAI8iNza0M7Q3UREtks5aQsCuwA%3D%3D"),
+         executed = 'https://github.com/Sage-Bionetworks/mHealthIdentityConfounding/blob/master/code/manuscript_figures.R')
+unlink("fig12_mPower_voice_increasing_number_of_subjects.pdf")
 
 #######################################################
 #######################################################
@@ -803,7 +857,7 @@ mycex <- 0.9
 cm <- 1
 cs <- 0.6
 
-
+pdf(file = "fig13_mPower_tapping_increasing_number_of_subjects.pdf", width = 6.5, height = 7)
 par(mar = c(3, 3, 1.5, 0.5), mgp = c(2, 0.75, 0))
 layout(mat)
 boxplot(drRWS.100, ylim = c(0.77, 1), las = 2, main = "record-wise split, 22 subjects",
@@ -855,6 +909,10 @@ abline(h = 0.05, col = "red")
 legend("topleft", legend = c("record-wise data split", "subject-wise data split"), 
        text.col = c("brown", "black"), bty = "n")
 mtext("(g)", side = 3, at = 6.5, line = -2)
+dev.off()
 
-
+synStore(File("fig13_mPower_tapping_increasing_number_of_subjects.pdf", parentId = SYN_FIGURE_LOCATION),
+         used = c("syn11566313", "syn11566668", "syn11566718", "https://raw.githubusercontent.com/Sage-Bionetworks/mHealthIdentityConfounding/master/code/utility_functions_disease_recognition_and_identity_confounding.R?token=AAI6z3aAM6iLYhShAI8iNza0M7Q3UREtks5aQsCuwA%3D%3D"),
+         executed = 'https://github.com/Sage-Bionetworks/mHealthIdentityConfounding/blob/master/code/manuscript_figures.R')
+unlink("fig13_mPower_tapping_increasing_number_of_subjects.pdf")
 

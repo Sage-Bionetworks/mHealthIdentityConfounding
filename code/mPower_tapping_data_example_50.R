@@ -96,6 +96,6 @@ for (i in seq(nRuns)) {
   statsSWS[i, "permPvalDR"] <- sum(drSWS[, i] >= statsSWS[i, "auc"])/nperm  
   
   save(statsRWS, statsSWS, drRWS, drSWS,
-       file = "output_mPower_tap_data_50_belltown.RData", compress = TRUE)
+       file = "output_mPower_tap_data_50.RData", compress = TRUE)
 }
 
